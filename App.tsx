@@ -1,13 +1,13 @@
+import 'react-native-gesture-handler';
 import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 import {Text} from 'react-native';
-
-declare const global: {HermesInternal: null | {}};
 
 const App: React.FC = () => {
   return (
-    <>
-      <Text>Hellow world</Text>
-    </>
+    <NavigationContainer>
+      <Text>Olá uahsuahsuhasuhuash</Text>
+    </NavigationContainer>
   );
 };
 
