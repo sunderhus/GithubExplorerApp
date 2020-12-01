@@ -4,7 +4,7 @@ export const HeaderContainer = styled.View`
   justify-content: space-between;
   align-items: center;
   flex-flow: row;
-  padding: 10px;
+  padding: 20px 0px;
 `;
 
 export const GoBackContainer = styled.View`

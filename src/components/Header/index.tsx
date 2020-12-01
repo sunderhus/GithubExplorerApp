@@ -1,33 +1,36 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
-import {Alert, Image, Text, View} from 'react-native';
+import {Alert, Image} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import logoImage from '../../assets/logo.png';
 import {
   GoBackButton,
   GoBackContainer,
   GoBackText,
   HeaderContainer,
 } from './styles';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import logoImage from '../../assets/logo.png';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 interface IHeaderProps {
   showGoBack?: boolean;
 }
 
-const Header: React.FC = () => {
+const Header: React.FC<IHeaderProps> = ({showGoBack}) => {
+  const navigation = useNavigation();
   const handleGoBack = useCallback(() => {
-    Alert.alert('voltar:)');
+    navigation.goBack();
   }, []);
 
   return (
     <HeaderContainer>
       <Image source={logoImage} />
-      <GoBackContainer>
-        <Icon name="chevron-left" size={14} color="#3d3d4d" />
-        <GoBackButton onPress={handleGoBack}>
-          <GoBackText>Voltar</GoBackText>
-        </GoBackButton>
-      </GoBackContainer>
+      {showGoBack && (
+        <GoBackContainer>
+          <Icon name="chevron-left" size={14} color="#3d3d4d" />
+          <GoBackButton onPress={handleGoBack}>
+            <GoBackText>Voltar</GoBackText>
+          </GoBackButton>
+        </GoBackContainer>
+      )}
     </HeaderContainer>
   );
 };
