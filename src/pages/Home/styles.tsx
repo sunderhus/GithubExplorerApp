@@ -1,4 +1,6 @@
+import {FlatList} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
+import {IRepository} from '.';
 
 export const Container = styled.ScrollView`
   flex: 1;
@@ -27,6 +29,13 @@ export const SearchField = styled.TextInput`
   font-family: 'Roboto-Bold';
 `;
 
+export const Error = styled.Text`
+  color: #c72828;
+  margin: 8px 0px;
+  font-size: 16px;
+  font-family: 'Roboto-Bold';
+`;
+
 export const SearchButton = styled.TouchableOpacity`
   background-color: #04d361;
   height: 64px;
@@ -41,4 +50,12 @@ export const SearchButtonText = styled.Text`
   font-weight: bold;
   font-size: 16px;
   font-family: 'Roboto-Regular';
+`;
+export const RepositoriesList = styled(
+  FlatList as new () => FlatList<IRepository>,
+)`
+  margin-top: 16px;
+  background-color: #d3d3d3;
+  max-height: 330px;
+  border-radius: 5px;
 `;
