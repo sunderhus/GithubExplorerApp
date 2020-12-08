@@ -1,17 +1,23 @@
-import React, {useCallback, useState} from 'react';
-import {AsyncStorage, Text, View} from 'react-native';
+import React, {useCallback, useMemo, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../service/api';
 import {
+  Chevron,
   Container,
   Error,
   RepositoriesList,
+  RepositoryContainer,
+  RepositoryDescription,
+  RepositoryImage,
+  RepositoryName,
+  RepositoryTextContainer,
   SearchButton,
   SearchButtonText,
   SearchContainer,
   SearchField,
+  Separator,
   Title,
 } from './styles';
 
@@ -27,11 +33,12 @@ export interface IRepository {
 const Home: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [errorFeedback, setErrorFeedback] = useState('');
+
   const [repositories, setRepositories] = useState<IRepository[]>([
     {
       full_name: 'sunderhus/GithubExplorer',
       description:
-        'Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻',
+        'Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻, Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻',
       owner: {
         login: 'matheus',
         avatar_url: 'https://avatars3.githubusercontent.com/u/44003532?v=4',
@@ -81,58 +88,67 @@ const Home: React.FC = () => {
       setErrorFeedback('Informe um repositório');
       return;
     }
+
     try {
       setErrorFeedback('');
       const response = await api.get<IRepository>(`repos/${searchText}`);
-
       const repository = response.data;
 
       setRepositories([...repositories, repository]);
-
-      setSearchText('');
     } catch (error) {
       setErrorFeedback(
-        'Erro na busca por esse repositório. Verifique o nome/repositório usados.',
+        'Repositório não encontrado. Verifique o nome/repositório usados.',
       );
     }
   }, [searchText]);
 
-  const renderItem = (item: IRepository) => {
+  const renderItem = ({description, owner, full_name}: IRepository) => {
     return (
-      <View style={{padding: 16}}>
-        <Text>{item.full_name}</Text>
-        <Text>{item.description}</Text>
-      </View>
+      <RepositoryContainer>
+        <RepositoryImage source={{uri: owner.avatar_url}} />
+        <RepositoryTextContainer>
+          <RepositoryName>{full_name}</RepositoryName>
+          <RepositoryDescription>{description}</RepositoryDescription>
+        </RepositoryTextContainer>
+        <Chevron name="chevron-right" size={24} />
+      </RepositoryContainer>
     );
   };
 
+  const renderSeparator = useMemo(() => {
+    return <Separator />;
+  }, []);
+
   return (
-    <>
-      <Container>
-        <Header />
-        <Title>Explore repositórios no github.</Title>
+    <Container>
+      <Header />
+      <Title>Explore repositórios no github.</Title>
 
-        <SearchContainer>
-          <SearchField
-            placeholder="Digite o nome do repositório"
-            placeholderTextColor="#777"
-            defaultValue={searchText}
-            onChangeText={setSearchText}
-          />
-          {!!errorFeedback && <Error>{errorFeedback}</Error>}
+      <SearchContainer>
+        <SearchField
+          placeholder="Digite o nome do repositório"
+          placeholderTextColor="#777777"
+          defaultValue={searchText}
+          onChangeText={setSearchText}
+        />
+        {!!errorFeedback && <Error>{errorFeedback}</Error>}
 
-          <SearchButton onPress={handleSubmit}>
-            <SearchButtonText>Pesquisar</SearchButtonText>
-          </SearchButton>
-        </SearchContainer>
+        <SearchButton onPress={handleSubmit}>
+          <SearchButtonText>Pesquisar</SearchButtonText>
+        </SearchButton>
+      </SearchContainer>
 
+      <ScrollView horizontal>
         <RepositoriesList
           data={repositories}
           keyExtractor={({full_name}, index) => String(`${full_name}-${index}`)}
           renderItem={({item}) => renderItem(item)}
+          ItemSeparatorComponent={() => renderSeparator}
         />
-      </Container>
-    </>
+      </ScrollView>
+
+      <Footer />
+    </Container>
   );
 };
 
