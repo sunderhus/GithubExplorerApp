@@ -2,6 +2,7 @@ import {FlatList} from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
 import styled from 'styled-components/native';
 import {IRepository} from '.';
+import * as Animatable from 'react-native-animatable';
 
 export const Container = styled.ScrollView`
   flex: 1;
@@ -31,7 +32,7 @@ export const SearchField = styled.TextInput`
   font-family: 'Roboto-Bold';
 `;
 
-export const Error = styled.Text`
+export const Error = styled(Animatable.Text)`
   color: #c72828;
   margin: 8px 0px;
   font-size: 16px;

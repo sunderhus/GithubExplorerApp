@@ -33,7 +33,6 @@ export interface IRepository {
 const Home: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [errorFeedback, setErrorFeedback] = useState('');
-
   const [repositories, setRepositories] = useState<IRepository[]>([
     {
       full_name: 'sunderhus/GithubExplorer',
@@ -95,6 +94,7 @@ const Home: React.FC = () => {
       const repository = response.data;
 
       setRepositories([...repositories, repository]);
+      setSearchText('');
     } catch (error) {
       setErrorFeedback(
         'Repositório não encontrado. Verifique o nome/repositório usados.',
@@ -106,7 +106,7 @@ const Home: React.FC = () => {
     return (
       <RepositoryContainer>
         <RepositoryImage source={{uri: owner.avatar_url}} />
-        <RepositoryTextContainer>
+        <RepositoryTextContainer showsVerticalScrollIndicator={false}>
           <RepositoryName>{full_name}</RepositoryName>
           <RepositoryDescription>{description}</RepositoryDescription>
         </RepositoryTextContainer>
@@ -131,7 +131,15 @@ const Home: React.FC = () => {
           defaultValue={searchText}
           onChangeText={setSearchText}
         />
-        {!!errorFeedback && <Error>{errorFeedback}</Error>}
+        {!!errorFeedback && (
+          <Error
+            animation="zoomInDown"
+            useNativeDriver
+            duration={1200}
+            easing="ease-in-cubic">
+            {errorFeedback}
+          </Error>
+        )}
 
         <SearchButton onPress={handleSubmit}>
           <SearchButtonText>Pesquisar</SearchButtonText>
