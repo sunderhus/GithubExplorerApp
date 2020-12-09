@@ -2,17 +2,13 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
+import RepositoryCard from '../../components/RepositoryCard';
 import api from '../../service/api';
 import {
   Chevron,
   Container,
   Error,
   RepositoriesList,
-  RepositoryContainer,
-  RepositoryDescription,
-  RepositoryImage,
-  RepositoryName,
-  RepositoryTextContainer,
   SearchButton,
   SearchButtonText,
   SearchContainer,
@@ -33,53 +29,7 @@ export interface IRepository {
 const Home: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [errorFeedback, setErrorFeedback] = useState('');
-  const [repositories, setRepositories] = useState<IRepository[]>([
-    {
-      full_name: 'sunderhus/GithubExplorer',
-      description:
-        'Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻, Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻',
-      owner: {
-        login: 'matheus',
-        avatar_url: 'https://avatars3.githubusercontent.com/u/44003532?v=4',
-      },
-    },
-    {
-      full_name: 'sunderhus/GithubExplorer',
-      description:
-        'Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻',
-      owner: {
-        login: 'matheus',
-        avatar_url: 'https://avatars3.githubusercontent.com/u/44003532?v=4',
-      },
-    },
-    {
-      full_name: 'sunderhus/GithubExplorer',
-      description:
-        'Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻',
-      owner: {
-        login: 'matheus',
-        avatar_url: 'https://avatars3.githubusercontent.com/u/44003532?v=4',
-      },
-    },
-    {
-      full_name: 'sunderhus/GithubExplorer',
-      description:
-        'Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻',
-      owner: {
-        login: 'matheus',
-        avatar_url: 'https://avatars3.githubusercontent.com/u/44003532?v=4',
-      },
-    },
-    {
-      full_name: 'sunderhus/GithubExplorer',
-      description:
-        'Projeto ReactJS + Integração com API + Local Storage API 🚀👨‍💻',
-      owner: {
-        login: 'matheus',
-        avatar_url: 'https://avatars3.githubusercontent.com/u/44003532?v=4',
-      },
-    },
-  ]);
+  const [repositories, setRepositories] = useState<IRepository[]>([]);
 
   const handleSubmit = useCallback(async () => {
     console.log(searchText);
@@ -102,18 +52,9 @@ const Home: React.FC = () => {
     }
   }, [searchText]);
 
-  const renderItem = ({description, owner, full_name}: IRepository) => {
-    return (
-      <RepositoryContainer>
-        <RepositoryImage source={{uri: owner.avatar_url}} />
-        <RepositoryTextContainer showsVerticalScrollIndicator={false}>
-          <RepositoryName>{full_name}</RepositoryName>
-          <RepositoryDescription>{description}</RepositoryDescription>
-        </RepositoryTextContainer>
-        <Chevron name="chevron-right" size={24} />
-      </RepositoryContainer>
-    );
-  };
+  const renderItem = useCallback((repository: IRepository) => {
+    return <RepositoryCard {...repository} />;
+  }, []);
 
   const renderSeparator = useMemo(() => {
     return <Separator />;
