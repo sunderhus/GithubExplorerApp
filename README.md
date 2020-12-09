@@ -18,6 +18,7 @@
 mkdir AppGithub
 cd AppGAppGithub
 git clone https://github.com/sunderhus/GithubExplorerApp.git
+cd GithubExplorerApp && code .
 yarn
 ```
 
