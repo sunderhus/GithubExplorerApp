@@ -10,15 +10,20 @@ import {
   RepositoryTextContainer,
 } from './styles';
 
-interface IRepositoryCardProps extends IRepository {}
+interface IRepositoryCardProps extends IRepository {
+  updateFunction(index: number): void;
+  index: number;
+}
 
 const RepositoryCard: React.FC<IRepositoryCardProps> = ({
   full_name,
   description,
   owner,
+  index,
+  updateFunction,
 }) => {
   return (
-    <RepositoryContainer>
+    <RepositoryContainer onLongPress={() => updateFunction(index)}>
       <RepositoryImage source={{uri: owner.avatar_url}} />
       <RepositoryTextContainer showsVerticalScrollIndicator={false}>
         <RepositoryName>{full_name}</RepositoryName>

@@ -52,9 +52,30 @@ const Home: React.FC = () => {
     }
   }, [searchText]);
 
-  const renderItem = useCallback((repository: IRepository) => {
-    return <RepositoryCard {...repository} />;
-  }, []);
+  const removeRepositoryCard = useCallback(
+    (position: number) => {
+      const filteredRepositories = repositories.filter((repository, index) => {
+        if (index !== position) {
+          return repository;
+        }
+      });
+      setRepositories([...filteredRepositories]);
+    },
+    [setRepositories],
+  );
+
+  const renderItem = useCallback(
+    (repository: IRepository, index: number) => {
+      return (
+        <RepositoryCard
+          {...repository}
+          index={index}
+          updateFunction={removeRepositoryCard}
+        />
+      );
+    },
+    [removeRepositoryCard],
+  );
 
   const renderSeparator = useMemo(() => {
     return <Separator />;
@@ -91,7 +112,7 @@ const Home: React.FC = () => {
         <RepositoriesList
           data={repositories}
           keyExtractor={({full_name}, index) => String(`${full_name}-${index}`)}
-          renderItem={({item}) => renderItem(item)}
+          renderItem={({item, index}) => renderItem(item, index)}
           ItemSeparatorComponent={() => renderSeparator}
         />
       </ScrollView>
