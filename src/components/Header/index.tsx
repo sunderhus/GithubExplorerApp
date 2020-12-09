@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
-import {Alert, Image} from 'react-native';
+import {Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import logoImage from '../../assets/logo.png';
 import {
@@ -18,7 +18,7 @@ const Header: React.FC<IHeaderProps> = ({showGoBack}) => {
   const navigation = useNavigation();
   const handleGoBack = useCallback(() => {
     navigation.goBack();
-  }, []);
+  }, [navigation]);
 
   return (
     <HeaderContainer>

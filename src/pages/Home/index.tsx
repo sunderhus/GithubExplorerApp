@@ -31,7 +31,6 @@ const Home: React.FC = () => {
   const [repositories, setRepositories] = useState<IRepository[]>([]);
 
   const handleAddRepository = useCallback(async () => {
-    console.log(searchText);
     if (searchText.length === 0) {
       setErrorFeedback('Informe um repositório');
       return;
@@ -49,17 +48,21 @@ const Home: React.FC = () => {
         'Repositório não encontrado. Verifique o nome/repositório usados.',
       );
     }
-  }, [searchText]);
+  }, [repositories, searchText]);
 
-  const removeRepositoryCard = (position: number) => {
-    const filteredRepositories = repositories.filter((repository, index) => {
-      if (index !== position) {
-        return repository;
-      }
-    });
+  const removeRepositoryCard = useCallback(
+    (position: number) => {
+      const filteredRepositories = repositories.filter((repository, index) => {
+        if (index !== position) {
+          return repository;
+        }
+        return false;
+      });
 
-    setRepositories(filteredRepositories);
-  };
+      setRepositories(filteredRepositories);
+    },
+    [repositories],
+  );
 
   const renderItem = useCallback(
     (repository: IRepository, index: number) => {

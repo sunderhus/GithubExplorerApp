@@ -1,7 +1,7 @@
 import {FlatList} from 'react-native-gesture-handler';
 import styled, {css} from 'styled-components/native';
-import {IRepository} from '.';
 import * as Animatable from 'react-native-animatable';
+import {IRepository} from '.';
 
 export const Container = styled.ScrollView`
   flex: 1;

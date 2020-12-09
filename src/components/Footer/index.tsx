@@ -1,8 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
-import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Linking, Text, TouchableOpacity, View} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import Feather from 'react-native-vector-icons/Feather';
+import styles from './styles';
+
 const heartBiting = {
   0: {
     opacity: 1,
@@ -31,7 +33,8 @@ const Footer: React.FC = () => {
 
   const handleGoToLinkedin = useCallback(() => {
     Linking.openURL('https://www.linkedin.com/in/matheus-sunderhus/');
-  }, [Linking]);
+  }, []);
+
   return (
     <View>
       <TouchableOpacity style={styles.container} onPress={handleGoToLinkedin}>
@@ -58,19 +61,5 @@ const Footer: React.FC = () => {
     </View>
   );
 };
-
-// exemplo de como usar a criação de estilos nativa do React Native.
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  icon: {
-    marginRight: 10,
-  },
-});
 
 export default Footer;

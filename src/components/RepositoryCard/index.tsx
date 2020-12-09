@@ -1,5 +1,4 @@
 import React from 'react';
-import {View} from 'react-native';
 import {IRepository} from '../../pages/Home';
 import {
   Chevron,
