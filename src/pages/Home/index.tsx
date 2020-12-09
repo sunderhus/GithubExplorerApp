@@ -52,17 +52,15 @@ const Home: React.FC = () => {
     }
   }, [searchText]);
 
-  const removeRepositoryCard = useCallback(
-    (position: number) => {
-      const filteredRepositories = repositories.filter((repository, index) => {
-        if (index !== position) {
-          return repository;
-        }
-      });
-      setRepositories([...filteredRepositories]);
-    },
-    [setRepositories],
-  );
+  const removeRepositoryCard = (position: number) => {
+    const filteredRepositories = repositories.filter((repository, index) => {
+      if (index !== position) {
+        return repository;
+      }
+    });
+
+    setRepositories(filteredRepositories);
+  };
 
   const renderItem = useCallback(
     (repository: IRepository, index: number) => {
