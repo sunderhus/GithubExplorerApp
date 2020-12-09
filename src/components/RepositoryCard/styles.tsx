@@ -6,6 +6,7 @@ export const RepositoryContainer = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background-color: #ffffff;
 `;
 
 export const RepositoryTextContainer = styled.ScrollView`

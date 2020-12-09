@@ -1,5 +1,5 @@
 import {FlatList} from 'react-native-gesture-handler';
-import styled from 'styled-components/native';
+import styled, {css} from 'styled-components/native';
 import {IRepository} from '.';
 import * as Animatable from 'react-native-animatable';
 
@@ -45,6 +45,12 @@ export const SearchButton = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   margin-top: 16px;
+
+  ${({disabled}) =>
+    disabled &&
+    css`
+      background-color: #777;
+    `};
 `;
 
 export const SearchButtonText = styled.Text`
@@ -53,14 +59,15 @@ export const SearchButtonText = styled.Text`
   font-size: 16px;
   font-family: 'Roboto-Regular';
 `;
+
 export const RepositoriesList = styled(
   FlatList as new () => FlatList<IRepository>,
 )`
   margin-top: 16px;
-  background-color: #ffffff;
   max-height: 330px;
   border-radius: 5px;
   margin-bottom: 16px;
+  height: 310px;
 `;
 
 export const Separator = styled.View`

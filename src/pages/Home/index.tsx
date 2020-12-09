@@ -5,7 +5,6 @@ import Header from '../../components/Header';
 import RepositoryCard from '../../components/RepositoryCard';
 import api from '../../service/api';
 import {
-  Chevron,
   Container,
   Error,
   RepositoriesList,
@@ -31,7 +30,7 @@ const Home: React.FC = () => {
   const [errorFeedback, setErrorFeedback] = useState('');
   const [repositories, setRepositories] = useState<IRepository[]>([]);
 
-  const handleSubmit = useCallback(async () => {
+  const handleAddRepository = useCallback(async () => {
     console.log(searchText);
     if (searchText.length === 0) {
       setErrorFeedback('Informe um repositório');
@@ -101,8 +100,10 @@ const Home: React.FC = () => {
           </Error>
         )}
 
-        <SearchButton onPress={handleSubmit}>
-          <SearchButtonText>Pesquisar</SearchButtonText>
+        <SearchButton
+          onPress={handleAddRepository}
+          disabled={searchText.length <= 0}>
+          <SearchButtonText>Adicionar</SearchButtonText>
         </SearchButton>
       </SearchContainer>
 
