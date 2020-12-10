@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import * as Animatable from 'react-native-animatable';
 import Footer from '../../components/Footer';
@@ -16,8 +16,10 @@ import {
   Separator,
   Title,
 } from './styles';
+import {useFavoriteRepository} from '../../hooks/repository';
 
 export interface IRepository {
+  id: number;
   full_name: string;
   description: string;
   owner: {
@@ -31,6 +33,15 @@ const Home: React.FC = () => {
   const [errorFeedback, setErrorFeedback] = useState('');
   const [repositories, setRepositories] = useState<IRepository[]>([]);
 
+  const {
+    favoritesRepositories,
+    toggleCachedRepository,
+  } = useFavoriteRepository();
+
+  useEffect(() => {
+    setRepositories(favoritesRepositories);
+  }, [favoritesRepositories]);
+
   const handleAddRepository = useCallback(async () => {
     if (searchText.length === 0) {
       setErrorFeedback('Informe um repositório');
@@ -40,32 +51,23 @@ const Home: React.FC = () => {
     try {
       setErrorFeedback('');
       const response = await api.get<IRepository>(`repos/${searchText}`);
-      const repository = response.data;
-      setRepositories([...repositories, repository]);
+      const {id, owner, description, full_name} = response.data;
+      await toggleCachedRepository({
+        id,
+        description,
+        full_name,
+        owner: {avatar_url: owner.avatar_url, login: owner.login},
+      });
       setSearchText('');
     } catch (error) {
       setErrorFeedback(
         'Repositório não encontrado. Verifique o nome/repositório usados.',
       );
     }
-  }, [repositories, searchText]);
-
-  const removeRepositoryCard = useCallback(
-    (position: number) => {
-      const filteredRepositories = repositories.filter((repository, index) => {
-        if (index !== position) {
-          return repository;
-        }
-        return false;
-      });
-
-      setRepositories(filteredRepositories);
-    },
-    [repositories],
-  );
+  }, [searchText, toggleCachedRepository]);
 
   const renderItem = useCallback(
-    (repository: IRepository, index: number) => {
+    (repository: IRepository) => {
       return (
         <Animatable.View
           animation="fadeInLeft"
@@ -74,13 +76,12 @@ const Home: React.FC = () => {
           useNativeDriver>
           <RepositoryCard
             {...repository}
-            index={index}
-            updateFunction={removeRepositoryCard}
+            toggleRepository={toggleCachedRepository}
           />
         </Animatable.View>
       );
     },
-    [removeRepositoryCard],
+    [toggleCachedRepository],
   );
 
   const renderSeparator = useMemo(() => {
@@ -116,11 +117,11 @@ const Home: React.FC = () => {
         </SearchButton>
       </SearchContainer>
 
-      <ScrollView horizontal>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <RepositoriesList
-          data={repositories}
+          data={favoritesRepositories}
           keyExtractor={({full_name}, index) => String(`${full_name}-${index}`)}
-          renderItem={({item, index}) => renderItem(item, index)}
+          renderItem={({item}) => renderItem(item)}
           ItemSeparatorComponent={() => renderSeparator}
         />
       </ScrollView>

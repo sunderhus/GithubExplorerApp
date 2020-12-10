@@ -11,26 +11,29 @@ import {
 } from './styles';
 
 interface IRepositoryCardProps extends IRepository {
-  updateFunction(index: number): void;
-  index: number;
+  toggleRepository: (repository: IRepository) => Promise<void>;
 }
 
 const RepositoryCard: React.FC<IRepositoryCardProps> = ({
   full_name,
   description,
   owner,
-  index,
-  updateFunction,
+  id,
+  toggleRepository,
 }) => {
   const navigation = useNavigation();
 
   const handleNavigateToDetails = useCallback(() => {
-    navigation.navigate('Details', {owner, full_name});
-  }, [full_name, navigation, owner]);
+    navigation.navigate('Details', {full_name});
+  }, [full_name, navigation]);
+
+  const handleRemoveRepository = useCallback(async () => {
+    await toggleRepository({full_name, description, owner, id});
+  }, [description, full_name, id, owner, toggleRepository]);
 
   return (
     <RepositoryContainer
-      onLongPress={() => updateFunction(index)}
+      onLongPress={handleRemoveRepository}
       onPress={handleNavigateToDetails}>
       <RepositoryImage source={{uri: owner.avatar_url}} />
       <RepositoryTextContainer showsVerticalScrollIndicator={false}>

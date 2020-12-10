@@ -35,13 +35,10 @@ const FavoriteRepositoryProvider: React.FC = ({children}) => {
   );
 
   const removeFavoriteRepository = useCallback(
-    async (full_name) => {
-      setFavoritesRepositories(
-        favoritesRepositories.filter(
-          (repository) => repository.full_name !== full_name,
-        ),
-      );
-
+    async (id) => {
+      setFavoritesRepositories([
+        ...favoritesRepositories.filter((repository) => repository.id !== id),
+      ]);
       await AsyncStorage.setItem(
         '@GithubExplorer:Favorites',
         JSON.stringify(favoritesRepositories),
@@ -50,15 +47,14 @@ const FavoriteRepositoryProvider: React.FC = ({children}) => {
     [favoritesRepositories],
   );
 
-  const toggleFavoriteMovie = useCallback(
+  const toggleFavoriteRepository = useCallback(
     async (repository: IRepository) => {
       if (
         favoritesRepositories.find(
-          (cachedRepository) =>
-            cachedRepository.full_name === repository.full_name,
+          (cachedRepository) => cachedRepository.id === repository.id,
         )
       ) {
-        await removeFavoriteRepository(repository.full_name);
+        await removeFavoriteRepository(repository.id);
       } else {
         await addFavoriteRepository(repository);
       }
@@ -84,7 +80,7 @@ const FavoriteRepositoryProvider: React.FC = ({children}) => {
     <FavoriteRepositoryContext.Provider
       value={{
         favoritesRepositories,
-        toggleCachedRepository: toggleFavoriteMovie,
+        toggleCachedRepository: toggleFavoriteRepository,
       }}>
       {children}
     </FavoriteRepositoryContext.Provider>

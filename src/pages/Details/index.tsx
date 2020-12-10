@@ -19,6 +19,7 @@ const Details: React.FC = () => {
   return (
     <Container>
       <Header showGoBack />
+      <Text>{name}</Text>
     </Container>
   );
 };
