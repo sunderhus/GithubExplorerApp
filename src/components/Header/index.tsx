@@ -1,11 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback} from 'react';
 import {Image} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import logoImage from '../../assets/logo.png';
 import {
   GoBackButton,
   GoBackContainer,
+  GoBackIcon,
   GoBackText,
   HeaderContainer,
 } from './styles';
@@ -25,8 +25,8 @@ const Header: React.FC<IHeaderProps> = ({showGoBack}) => {
       <Image source={logoImage} />
       {showGoBack && (
         <GoBackContainer>
-          <Icon name="chevron-left" size={14} color="#3d3d4d" />
           <GoBackButton onPress={handleGoBack}>
+            <GoBackIcon name="chevron-left" size={14} color="#3d3d4d" />
             <GoBackText>Voltar</GoBackText>
           </GoBackButton>
         </GoBackContainer>
