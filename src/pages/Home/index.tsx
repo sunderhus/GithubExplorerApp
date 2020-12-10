@@ -1,5 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
+import * as Animatable from 'react-native-animatable';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import RepositoryCard from '../../components/RepositoryCard';
@@ -40,7 +41,6 @@ const Home: React.FC = () => {
       setErrorFeedback('');
       const response = await api.get<IRepository>(`repos/${searchText}`);
       const repository = response.data;
-
       setRepositories([...repositories, repository]);
       setSearchText('');
     } catch (error) {
@@ -67,11 +67,16 @@ const Home: React.FC = () => {
   const renderItem = useCallback(
     (repository: IRepository, index: number) => {
       return (
-        <RepositoryCard
-          {...repository}
-          index={index}
-          updateFunction={removeRepositoryCard}
-        />
+        <Animatable.View
+          animation="fadeInLeftBig"
+          duration={300}
+          easing="ease-in-cubic">
+          <RepositoryCard
+            {...repository}
+            index={index}
+            updateFunction={removeRepositoryCard}
+          />
+        </Animatable.View>
       );
     },
     [removeRepositoryCard],
