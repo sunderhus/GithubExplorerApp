@@ -3,11 +3,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {StatusBar} from 'react-native';
 import Home from '../pages/Home';
-import Details from '../components/Details';
+import Details from '../pages/Details';
 
 const {Navigator, Screen} = createStackNavigator();
 
-const Routes = () => {
+const Routes = (): JSX.Element => {
   return (
     <NavigationContainer>
       <StatusBar hidden />

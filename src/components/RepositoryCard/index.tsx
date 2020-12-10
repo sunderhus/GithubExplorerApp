@@ -1,4 +1,5 @@
-import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {useCallback} from 'react';
 import {IRepository} from '../../pages/Home';
 import {
   Chevron,
@@ -21,8 +22,16 @@ const RepositoryCard: React.FC<IRepositoryCardProps> = ({
   index,
   updateFunction,
 }) => {
+  const navigation = useNavigation();
+
+  const handleNavigateToDetails = useCallback(() => {
+    navigation.navigate('Details', {owner, full_name});
+  }, [full_name, navigation, owner]);
+
   return (
-    <RepositoryContainer onLongPress={() => updateFunction(index)}>
+    <RepositoryContainer
+      onLongPress={() => updateFunction(index)}
+      onPress={handleNavigateToDetails}>
       <RepositoryImage source={{uri: owner.avatar_url}} />
       <RepositoryTextContainer showsVerticalScrollIndicator={false}>
         <RepositoryName>{full_name}</RepositoryName>
