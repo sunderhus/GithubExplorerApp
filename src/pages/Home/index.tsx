@@ -68,7 +68,7 @@ const Home: React.FC = () => {
     (repository: IRepository, index: number) => {
       return (
         <Animatable.View
-          animation="fadeInLeftBig"
+          animation="fadeInLeft"
           duration={300}
           easing="ease-in-cubic">
           <RepositoryCard
