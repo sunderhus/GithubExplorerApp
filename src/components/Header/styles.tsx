@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const HeaderContainer = styled.View`
   justify-content: space-between;
@@ -13,9 +14,14 @@ export const GoBackContainer = styled.View`
 `;
 
 export const GoBackButton = styled.TouchableOpacity`
-  margin-left: 10px;
+  margin-left: 8px;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
 `;
-
+export const GoBackIcon = styled(Icon)`
+  margin-right: 10px;
+`;
 export const GoBackText = styled.Text`
   font-size: 16px;
   font-weight: bold;
