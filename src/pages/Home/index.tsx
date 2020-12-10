@@ -70,7 +70,8 @@ const Home: React.FC = () => {
         <Animatable.View
           animation="fadeInLeft"
           duration={300}
-          easing="ease-in-cubic">
+          easing="ease-in-cubic"
+          useNativeDriver>
           <RepositoryCard
             {...repository}
             index={index}
