@@ -1,9 +1,10 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
+import React, {useCallback, useMemo, useState} from 'react';
 import * as Animatable from 'react-native-animatable';
+import {ScrollView} from 'react-native-gesture-handler';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import RepositoryCard from '../../components/RepositoryCard';
+import {useFavoriteRepository} from '../../hooks/repository';
 import api from '../../service/api';
 import {
   Container,
@@ -16,7 +17,6 @@ import {
   Separator,
   Title,
 } from './styles';
-import {useFavoriteRepository} from '../../hooks/repository';
 
 export interface IRepository {
   id: number;
@@ -31,16 +31,12 @@ export interface IRepository {
 const Home: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [errorFeedback, setErrorFeedback] = useState('');
-  const [repositories, setRepositories] = useState<IRepository[]>([]);
 
   const {
     favoritesRepositories,
     toggleCachedRepository,
+    addRepository,
   } = useFavoriteRepository();
-
-  useEffect(() => {
-    setRepositories(favoritesRepositories);
-  }, [favoritesRepositories]);
 
   const handleAddRepository = useCallback(async () => {
     if (searchText.length === 0) {
@@ -52,7 +48,7 @@ const Home: React.FC = () => {
       setErrorFeedback('');
       const response = await api.get<IRepository>(`repos/${searchText}`);
       const {id, owner, description, full_name} = response.data;
-      await toggleCachedRepository({
+      await addRepository({
         id,
         description,
         full_name,
@@ -64,7 +60,7 @@ const Home: React.FC = () => {
         'Repositório não encontrado. Verifique o nome/repositório usados.',
       );
     }
-  }, [searchText, toggleCachedRepository]);
+  }, [addRepository, searchText]);
 
   const renderItem = useCallback(
     (repository: IRepository) => {

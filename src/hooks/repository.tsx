@@ -11,6 +11,7 @@ import {IRepository} from '../pages/Home';
 interface IFavoriteRepositoryContext {
   favoritesRepositories: Array<IRepository>;
   toggleCachedRepository(repository: IRepository): Promise<void>;
+  addRepository(repository: IRepository): Promise<void>;
 }
 
 const FavoriteRepositoryContext = createContext<IFavoriteRepositoryContext>(
@@ -35,9 +36,11 @@ const FavoriteRepositoryProvider: React.FC = ({children}) => {
   );
 
   const removeFavoriteRepository = useCallback(
-    async (id) => {
+    async (positionToRemove) => {
       setFavoritesRepositories([
-        ...favoritesRepositories.filter((repository) => repository.id !== id),
+        ...favoritesRepositories.filter((repository, position) => {
+          return position !== positionToRemove ? repository : false;
+        }),
       ]);
       await AsyncStorage.setItem(
         '@GithubExplorer:Favorites',
@@ -49,12 +52,11 @@ const FavoriteRepositoryProvider: React.FC = ({children}) => {
 
   const toggleFavoriteRepository = useCallback(
     async (repository: IRepository) => {
-      if (
-        favoritesRepositories.find(
-          (cachedRepository) => cachedRepository.id === repository.id,
-        )
-      ) {
-        await removeFavoriteRepository(repository.id);
+      const indexOfRepository = favoritesRepositories.findIndex(
+        (cachedRepository) => cachedRepository.id === repository.id,
+      );
+      if (indexOfRepository > -1) {
+        await removeFavoriteRepository(indexOfRepository);
       } else {
         await addFavoriteRepository(repository);
       }
@@ -81,6 +83,7 @@ const FavoriteRepositoryProvider: React.FC = ({children}) => {
       value={{
         favoritesRepositories,
         toggleCachedRepository: toggleFavoriteRepository,
+        addRepository: addFavoriteRepository,
       }}>
       {children}
     </FavoriteRepositoryContext.Provider>
